@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS stores;
+GRANT ALL PRIVILEGES ON stores. * TO 'stores';

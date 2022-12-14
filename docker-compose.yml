@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+    db:
+      image: mariadb:10.10
+      restart: always
+      command: --init-file /data/application/init.sql
+      volumes:
+        - ./scripts/init.sql:/data/application/init.sql
+      environment:
+        MARIADB_USER: stores
+        MARIADB_PASSWORD: signscloud
+        MARIADB_ROOT_PASSWORD: signscloud
+
+    rabbitmq:
+      image: rabbitmq:3.11.4
+      restart: always
+      environment:
+        RABBITMQ_DEFAULT_USER: signscloud
+        RABBITMQ_DEFAULT_PASS: generacion2022
+      
+    web:
+      restart: always
+      build: .
+      ports:
+        - "80:80"
+      expose:
+        - 80
+      links:
+        - db:db
+        - rabbitmq:rabbitmq
+
+      env_file: .env
+      environment:
+        DEBUG: 'true'
